@@ -1,4 +1,5 @@
 import NotesView from "./NotesView.js";
+import NotesAPI from "./NotesAPI.js";
 const app = document.getElementById("app");
 const view = new NotesView(app, {
     onNoteSelect() {
@@ -10,7 +11,9 @@ const view = new NotesView(app, {
     onNoteDelete() {
         console.log("Note has been deleted");
     },
-    onNoteEdit() {
-        console.log("Note has been edited");
+    onNoteEdit(newTitle, newBody) {
+        console.log(newTitle + " " + newBody);
     },
 });
+
+view.updateNoteList(NotesAPI.getAllNotes());
