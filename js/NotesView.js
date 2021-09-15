@@ -69,6 +69,8 @@ export default class NotesView {
 
         //empty the list
         noteslistContainer.innerHTML = "";
+
+        //retrieve list of notes from localstorage
         for (const note of notes) {
             const html = this._createListItemHTML(
                 note.id,
@@ -78,5 +80,35 @@ export default class NotesView {
             );
             noteslistContainer.insertAdjacentHTML("beforeend", html);
         }
+
+        noteslistContainer
+            .querySelectorAll(".notes__list-item")
+            .forEach((noteListItem) => {
+                noteListItem.addEventListener("click", () => {
+                    this.onNoteSelect(noteListItem.dataset.noteId);
+                    // console.log(noteListItem.dataset.noteId);
+                });
+                noteListItem.addEventListener("dblclick", () => {
+                    const doDelete = confirm(
+                        "Are you sure you want to delete the note?"
+                    );
+                    if (doDelete) {
+                        this.onNoteDelete(noteListItem.dataset.noteId);
+                    }
+                });
+            });
+    }
+
+    updateActiveNote(note) {
+        this.root.querySelector(".notes__title").value = note.title;
+        this.root.querySelector(".notes__body").value = note.body;
+        this.root
+            .querySelectorAll(".notes__list-item")
+            .forEach((noteListItem) => {
+                noteListItem.classList.remove("notes__list-item--selected");
+            });
+        this.root
+            .querySelector(`.notes__list-item[data-note-id="${note.id}"]`)
+            .classList.add("notes__list-item--selected");
     }
 }
